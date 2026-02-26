@@ -2,42 +2,52 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Eve 官网</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Eve 官网 | 公益&付费双端</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
         }
         body {
-            background-color: #000;
+            background: #000;
             color: #fff;
             font-family: "Microsoft YaHei", sans-serif;
-            min-height: 100vh;
+            height: 100vh;
             overflow: hidden;
             position: relative;
+            /* 轻量科技风纹理背景 - 零性能损耗 */
+            background: #000 url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h20v20H0V0zm2 2v16h16V2H2z' fill='%230a2a4a' fill-opacity='0.3' fill-rule='evenodd'/%3E%3C/svg%3E");
         }
-        /* 左侧竖排滑入提示 */
+        /* 左侧竖排滑切提示 - 科技霓虹光效 */
         .slide-tip {
             position: fixed;
             left: 20px;
             top: 50%;
-            transform: translateY(-50%) rotate(90deg);
+            transform: translateY(-50%) rotate(90deg) translateZ(0);
             transform-origin: left center;
             font-size: 18px;
-            color: #ccc;
+            color: #00c8ff;
             letter-spacing: 2px;
             cursor: pointer;
             z-index: 100;
+            text-shadow: 0 0 8px #00c8ff, 0 0 12px #00c8ff50;
         }
-        /* 页面容器 - 丝滑切换核心 */
+        /* 双端容器 - 消除空白+缩放隔离核心 */
         .page-container {
             width: 200vw;
             height: 100vh;
             display: flex;
-            transition: transform 0.5s ease-in-out;
+            position: relative;
+            z-index: 1;
+            transition: transform 0.4s ease-out;
+            overflow: hidden;
+            transform: translateZ(0); /* 硬件加速 */
         }
+        /* 单端大格子 - 满宽满高 无任何空白 */
         .page {
             width: 100vw;
             height: 100vh;
@@ -47,43 +57,31 @@
             justify-content: center;
             text-align: center;
             padding: 20px;
+            background: rgba(0, 15, 35, 0.85);
+            overflow: hidden;
         }
-        /* 切换后偏移 */
+        /* 切换偏移 - 精准100vw 无露边 */
         .page-container.slide {
-            transform: translateX(-100vw);
+            transform: translateX(-100vw) translateZ(0);
         }
-        /* 通用样式 */
+        /* 通用标题 - 科技风霓虹光效 */
         .title {
             font-size: 32px;
             margin-bottom: 20px;
             color: #fff;
             letter-spacing: 2px;
+            text-shadow: 0 0 10px #00c8ff, 0 0 15px #00c8ff50;
         }
+        /* 通用描述 - 科技风浅蓝 保留原排版 */
         .desc {
             font-size: 16px;
             line-height: 1.8;
             max-width: 600px;
             margin-bottom: 40px;
-            color: #ccc;
+            color: #80d8ff;
+            text-shadow: 0 0 5px #00c8ff30;
         }
-        .btn {
-            display: inline-block;
-            padding: 14px 30px;
-            margin: 10px;
-            background-color: #222;
-            border: 1px solid #444;
-            border-radius: 8px;
-            color: #fff;
-            text-decoration: none;
-            font-size: 16px;
-            transition: all 0.3s;
-        }
-        .btn:hover {
-            background-color: #111;
-            border-color: #666;
-            transform: scale(1.05);
-        }
-        /* 付费端专属样式 */
+        /* 付费端专属样式 - 完全保留原内容+排版 */
         .pay-desc {
             line-height: 2;
         }
@@ -92,17 +90,66 @@
             font-size: 20px;
             font-weight: bold;
             margin: 10px 0;
+            text-shadow: 0 0 8px #ff4d4d, 0 0 12px #ff4d4d50;
+        }
+        /* 科技风按钮 - 轻量hover 低配机流畅 */
+        .btn {
+            display: inline-block;
+            padding: 14px 30px;
+            margin: 10px;
+            background: #0a2a4a;
+            border: 1px solid #00c8ff;
+            border-radius: 8px;
+            color: #fff;
+            text-decoration: none;
+            font-size: 16px;
+            transition: all 0.2s ease;
+            text-shadow: 0 0 5px #00c8ff;
+        }
+        .btn:hover {
+            background: #0d365f;
+            border-color: #00ffff;
+            transform: scale(1.03);
+            box-shadow: 0 0 10px #00c8ff50;
+        }
+        /* 端标识角标 - 公益/付费清晰区分 */
+        .page-tag {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 14px;
+            padding: 6px 15px;
+            border-radius: 30px;
+            background: rgba(0, 200, 255, 0.2);
+            border: 1px solid #00c8ff;
+            color: #00c8ff;
+            text-shadow: 0 0 5px #00c8ff;
+        }
+        .pay-tag {
+            background: rgba(255, 77, 77, 0.2);
+            border-color: #ff4d4d;
+            color: #ff4d4d;
+            text-shadow: 0 0 5px #ff4d4d;
+        }
+        /* 移动端/低配机专属适配 */
+        @media (max-width: 768px) {
+            .title {font-size: 26px;}
+            .desc {font-size: 15px; max-width: 90%;}
+            .btn {padding: 12px 25px; font-size: 15px;}
+            .slide-tip {font-size: 16px; left: 15px;}
+            .page-tag {font-size: 12px; top: 15px; right: 15px;}
         }
     </style>
 </head>
 <body>
-    <!-- 左侧竖排滑入提示 -->
+    <!-- 左侧滑切提示 -->
     <div class="slide-tip" id="slideTip">往右滑</div>
 
-    <!-- 双页面容器 -->
+    <!-- 双端容器 - 公益+付费完整保留 -->
     <div class="page-container" id="pageContainer">
-        <!-- Eve 原页面 -->
-        <div class="page" id="evePage">
+        <!-- 公益端 Eve - 完全保留原所有内容&宣传标语 -->
+        <div class="page">
+            <div class="page-tag">公益端 · Eve</div>
             <div class="title">欢迎进入 Eve 官网</div>
             <div class="desc">
                 本客户端采用最流畅，最安全，最可靠的底包，请您放心使用，<br>
@@ -112,8 +159,9 @@
             <a href="https://qun.qq.com/universal-share/share?ac=1&authKey=7aQgLwx7%2BQ8Uj3orYz7cCTNKv30veeneQ4nW6Jrqd3Ee9IBj1GabDF02sXuStfpG&busi_data=eyJncm91cENvZGUiOiIyNjI0NDY3OTgiLCJ0b2tlbiI6IlRyY0hETSt2c3o0VWdiWHAxZUk0RysyN3Ftd2hqeEZ1QXhDaEhEVDU5NHR0a21xS2IvYUtIY3JPUlFuVy9wRU0iLCJ1aW4iOiIzNDYyMDQzNzA1In0%3D&data=YahMof2zFf05_HAqsPn5P5ZH15KTEF2wLYwg_IFPTS-xP4QXNCkJe5afoi8mvbNpdpZxVAil1LgcOJcl2RHkIg&svctype=4&tempid=h5_group_info" target="_blank" class="btn">加入审核 QQ 群</a>
         </div>
 
-        <!-- BladeFury 付费端页面 -->
-        <div class="page" id="payPage">
+        <!-- 付费端 BladeFury - 完全保留原所有内容&宣传标语&折扣&按钮 -->
+        <div class="page">
+            <div class="page-tag pay-tag">付费端 · BladeFury</div>
             <div class="title">欢迎来到BladeFury Client官网</div>
             <div class="desc pay-desc">
                 BladeFury Client采用好看的材质，丝滑的手感，让你打起床不会输，让你生存。一次性通关<br>
@@ -126,44 +174,63 @@
     </div>
 
     <script>
-        // 获取元素
+        // 极简JS - 低配机零卡顿 核心功能完整
         const slideTip = document.getElementById('slideTip');
         const pageContainer = document.getElementById('pageContainer');
         let isSlide = false;
+        let startX = 0;
 
-        // 点击左侧提示切换页面
-        slideTip.addEventListener('click', () => {
+        // 禁止触屏默认行为 减少卡顿
+        document.addEventListener('touchmove', (e) => e.preventDefault(), { passive: false });
+
+        // 点击切换 - 公益↔付费
+        slideTip.onclick = () => {
             pageContainer.classList.toggle('slide');
             isSlide = !isSlide;
-            // 切换提示文字（可选，增强体验）
             slideTip.innerText = isSlide ? '往左滑' : '往右滑';
-        });
+        };
 
-        // 支持鼠标拖拽切换（丝滑体验升级）
-        let startX = 0;
-        document.addEventListener('touchstart', (e) => {
-            startX = e.touches[0].clientX;
-        });
-        document.addEventListener('mousedown', (e) => {
-            startX = e.clientX;
-        });
-        // 触摸/鼠标松开触发切换
+        // 拖拽开始 - 仅记录坐标 无冗余计算
+        function handleStart(e) {
+            startX = e.type === 'touchstart' ? e.touches[0].clientX : e.clientX;
+            pageContainer.style.transition = 'none';
+        }
+
+        // 拖拽结束 - 精准判定 丝滑切换
         function handleEnd(e) {
             const endX = e.type === 'touchend' ? e.changedTouches[0].clientX : e.clientX;
             const diffX = startX - endX;
-            // 滑动距离大于50px触发切换
-            if (diffX > 50 && !isSlide) {
+            pageContainer.style.transition = 'transform 0.4s ease-out';
+
+            // 40px灵敏判定 适配低配机触屏
+            if (diffX > 40 && !isSlide) {
                 pageContainer.classList.add('slide');
                 slideTip.innerText = '往左滑';
                 isSlide = true;
-            } else if (diffX < -50 && isSlide) {
+            } else if (diffX < -40 && isSlide) {
                 pageContainer.classList.remove('slide');
                 slideTip.innerText = '往右滑';
                 isSlide = false;
             }
+            startX = 0;
         }
+
+        // 绑定拖拽事件 - 鼠标+触屏 全端支持
+        document.addEventListener('touchstart', handleStart);
         document.addEventListener('touchend', handleEnd);
+        document.addEventListener('mousedown', handleStart);
         document.addEventListener('mouseup', handleEnd);
+        document.addEventListener('mouseleave', handleEnd);
+
+        // 窗口缩放/大小变化 - 强制锁定位置 消除空白+缩放隔离
+        window.onresize = () => {
+            pageContainer.style.transform = isSlide ? 'translateX(-100vw) translateZ(0)' : 'translateX(0) translateZ(0)';
+        };
+
+        // 页面加载完成 - 硬件加速 低配机更流畅
+        window.onload = () => {
+            pageContainer.style.transform = isSlide ? 'translateX(-100vw) translateZ(0)' : 'translateX(0) translateZ(0)';
+        };
     </script>
 </body>
 </html>
