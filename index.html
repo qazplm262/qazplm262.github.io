@@ -10,12 +10,37 @@
             padding: 0;
             box-sizing: border-box;
         }
-
         body {
             background-color: #000;
             color: #fff;
             font-family: "Microsoft YaHei", sans-serif;
             min-height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+        /* 左侧竖排滑入提示 */
+        .slide-tip {
+            position: fixed;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%) rotate(90deg);
+            transform-origin: left center;
+            font-size: 18px;
+            color: #ccc;
+            letter-spacing: 2px;
+            cursor: pointer;
+            z-index: 100;
+        }
+        /* 页面容器 - 丝滑切换核心 */
+        .page-container {
+            width: 200vw;
+            height: 100vh;
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+        }
+        .page {
+            width: 100vw;
+            height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -23,14 +48,17 @@
             text-align: center;
             padding: 20px;
         }
-
+        /* 切换后偏移 */
+        .page-container.slide {
+            transform: translateX(-100vw);
+        }
+        /* 通用样式 */
         .title {
             font-size: 32px;
             margin-bottom: 20px;
             color: #fff;
             letter-spacing: 2px;
         }
-
         .desc {
             font-size: 16px;
             line-height: 1.8;
@@ -38,7 +66,6 @@
             margin-bottom: 40px;
             color: #ccc;
         }
-
         .btn {
             display: inline-block;
             padding: 14px 30px;
@@ -51,25 +78,92 @@
             font-size: 16px;
             transition: all 0.3s;
         }
-
         .btn:hover {
             background-color: #111;
             border-color: #666;
             transform: scale(1.05);
         }
+        /* 付费端专属样式 */
+        .pay-desc {
+            line-height: 2;
+        }
+        .discount {
+            color: #ff4d4d;
+            font-size: 20px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
     </style>
 </head>
 <body>
+    <!-- 左侧竖排滑入提示 -->
+    <div class="slide-tip" id="slideTip">往右滑</div>
 
-    <div class="title">欢迎进入 Eve 官网</div>
+    <!-- 双页面容器 -->
+    <div class="page-container" id="pageContainer">
+        <!-- Eve 原页面 -->
+        <div class="page" id="evePage">
+            <div class="title">欢迎进入 Eve 官网</div>
+            <div class="desc">
+                本客户端采用最流畅，最安全，最可靠的底包，请您放心使用，<br>
+                优美的美术风格让大家都喜欢
+            </div>
+            <a href="https://b23.tv/Ie0P5AP" target="_blank" class="btn">前往 B 站主页</a>
+            <a href="https://qun.qq.com/universal-share/share?ac=1&authKey=7aQgLwx7%2BQ8Uj3orYz7cCTNKv30veeneQ4nW6Jrqd3Ee9IBj1GabDF02sXuStfpG&busi_data=eyJncm91cENvZGUiOiIyNjI0NDY3OTgiLCJ0b2tlbiI6IlRyY0hETSt2c3o0VWdiWHAxZUk0RysyN3Ftd2hqeEZ1QXhDaEhEVDU5NHR0a21xS2IvYUtIY3JPUlFuVy9wRU0iLCJ1aW4iOiIzNDYyMDQzNzA1In0%3D&data=YahMof2zFf05_HAqsPn5P5ZH15KTEF2wLYwg_IFPTS-xP4QXNCkJe5afoi8mvbNpdpZxVAil1LgcOJcl2RHkIg&svctype=4&tempid=h5_group_info" target="_blank" class="btn">加入审核 QQ 群</a>
+        </div>
 
-    <div class="desc">
-        本客户端采用最流畅，最安全，最可靠的底包，请您放心使用，<br>
-        优美的美术风格让大家都喜欢
+        <!-- BladeFury 付费端页面 -->
+        <div class="page" id="payPage">
+            <div class="title">欢迎来到BladeFury Client官网</div>
+            <div class="desc pay-desc">
+                BladeFury Client采用好看的材质，丝滑的手感，让你打起床不会输，让你生存。一次性通关<br>
+                以刃为锋，以狂为势 —— 专属你的BladeFury Client
+                <div class="discount">现在折扣只售价5r (截止2026年3月5号) 先到先得</div>
+            </div>
+            <a href="https://qun.qq.com/universal-share/share?ac=1&authKey=y07bt3oH4jbqSQn1DUF27NSL%2BxA3rqabfh9VahCFyPWDk6igniDXCOG4Yr59nQVz&busi_data=eyJncm91cENvZGUiOiI4OTIxODQ3NjMiLCJ0b2tlbiI6IjlvNmtoeDBYUXBYeVRaWXVlWERNeFVvSEtPc1dUNnRJUFdNMXJOY21hU0hub1ZSYW9mQitRZmZZRnBUNXI3UjgiLCJ1aW4iOiIzNDYyMDQzNzA1In0%3D&data=hFg_7JJdlcQUZQ8llhyhPf1ebGbn6OXeSABHKCm3PKYtAQV_MooVIEdVg-pnLBLx0Xekqd3tgs3JufZ6rDnFXQ&svctype=4&tempid=h5_group_info" target="_blank" class="btn">加入售卖群</a>
+            <a href="https://buy.jry0.com/shop/XiaoFan" target="_blank" class="btn">进入店铺</a>
+        </div>
     </div>
 
-    <a href="https://b23.tv/Ie0P5AP" target="_blank" class="btn">前往 B 站主页</a>
-    <a href="https://qun.qq.com/universal-share/share?ac=1&authKey=7aQgLwx7%2BQ8Uj3orYz7cCTNKv30veeneQ4nW6Jrqd3Ee9IBj1GabDF02sXuStfpG&busi_data=eyJncm91cENvZGUiOiIyNjI0NDY3OTgiLCJ0b2tlbiI6IlRyY0hETSt2c3o0VWdiWHAxZUk0RysyN3Ftd2hqeEZ1QXhDaEhEVDU5NHR0a21xS2IvYUtIY3JPUlFuVy9wRU0iLCJ1aW4iOiIzNDYyMDQzNzA1In0%3D&data=YahMof2zFf05_HAqsPn5P5ZH15KTEF2wLYwg_IFPTS-xP4QXNCkJe5afoi8mvbNpdpZxVAil1LgcOJcl2RHkIg&svctype=4&tempid=h5_group_info" target="_blank" class="btn">加入审核 QQ 群</a>
+    <script>
+        // 获取元素
+        const slideTip = document.getElementById('slideTip');
+        const pageContainer = document.getElementById('pageContainer');
+        let isSlide = false;
 
+        // 点击左侧提示切换页面
+        slideTip.addEventListener('click', () => {
+            pageContainer.classList.toggle('slide');
+            isSlide = !isSlide;
+            // 切换提示文字（可选，增强体验）
+            slideTip.innerText = isSlide ? '往左滑' : '往右滑';
+        });
+
+        // 支持鼠标拖拽切换（丝滑体验升级）
+        let startX = 0;
+        document.addEventListener('touchstart', (e) => {
+            startX = e.touches[0].clientX;
+        });
+        document.addEventListener('mousedown', (e) => {
+            startX = e.clientX;
+        });
+        // 触摸/鼠标松开触发切换
+        function handleEnd(e) {
+            const endX = e.type === 'touchend' ? e.changedTouches[0].clientX : e.clientX;
+            const diffX = startX - endX;
+            // 滑动距离大于50px触发切换
+            if (diffX > 50 && !isSlide) {
+                pageContainer.classList.add('slide');
+                slideTip.innerText = '往左滑';
+                isSlide = true;
+            } else if (diffX < -50 && isSlide) {
+                pageContainer.classList.remove('slide');
+                slideTip.innerText = '往右滑';
+                isSlide = false;
+            }
+        }
+        document.addEventListener('touchend', handleEnd);
+        document.addEventListener('mouseup', handleEnd);
+    </script>
 </body>
 </html>
